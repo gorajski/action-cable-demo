@@ -8,7 +8,15 @@ App.room = App.cable.subscriptions.create "RoomChannel",
   received: (data) ->
     # Called when there's incoming data on the websocket for this channel
     # The keyword 'data' is provided out-of-the-box, much like params in Sinatra
-		alert data['message']
+    $('#messages').append(data['message'])
 
-  speak: (message) ->
-    @perform 'speak', message: message
+  speak: (blah) ->
+    @perform 'sprecht', msg: blah
+
+
+
+$(document).on 'keypress', '[data-behavior~=room_speaker]', (event) -> 
+    if event.keyCode is 13
+      App.room.speak event.target.value
+      event.target.value = ''
+      event.preventDefault()
